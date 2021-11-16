@@ -4,5 +4,4 @@
 .Ruserdata
 # Añadir estos para públicar
 # comentarlos para trabajar en privado
-UnRmd.Rmd
-probando.Rproj
+contenidos/*.Rmd
