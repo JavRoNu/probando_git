@@ -4,4 +4,4 @@
 .Ruserdata
 # Añadir estos para públicar
 # comentarlos para trabajar en privado
-contenidos/*.Rmd
+contenidos/*.Rmd   
