@@ -1,0 +1,1541 @@
+---
+title: "Guía-Introducción"
+author:
+- Javier Kniffki
+- javierkniffki@gmail.com
+date: "`r Sys.Date()`"
+subtitle: "Introducción a R. Ciencias Políticas"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+---
+
+<!-- <script> -->
+<!--    $(document).ready(function() { -->
+<!--      $head = $('#header'); -->
+<!--      $head.prepend('<img src=\"kstats.png\" style=\"float: right;width: 150px;\"/>') -->
+<!--    }); -->
+<!-- </script> -->
+
+## ¿Qué es R? 
+
+R es un entorno de programación orientado al análisis estadístico, flexible y con multitud de librerías, muy utilizado para el análisis de datos científicos. Es Software Libre y se distribuye bajo licencia GPL.
+
+## ¿Porqué utilizar R? 
+
+"El software libre es un tipo de programas de ordenador que una vez obtenidos pueden ser usados, copiados, estudiados, modificados y redistribuidos libremente. Estos permisos son otorgados por sus autores, o quién sea que ostente los derechos de propiedad intelectual sobre el producto, a través de un acuerdo de licencia —una forma de contrato— que acompaña a cualquier programa.
+
+De forma más precisa, el software libre es aquel cuya licencia ofrece a los usuarios las siguientes cuatro libertades:
+
+* La libertad de usar el programa, con cualquier propósito. (libertad 0)
+* La libertad de estudiar cómo funciona el programa, y adaptarlo a tus necesidades. (libertad 1)
+* La libertad de distribuir copias, con lo que puedes ayudar a tu vecino. (libertad 2)
+* La libertad de mejorar el programa y hacer públicas las mejoras a los demás, de modo que toda la comunidad se beneficie. (libertad 3)
+
+Para que las libertades 1 y 3 sean posibles es necesario que los usuarios puedan tener acceso al código fuente de los programas. Este código fuente es el conjunto de líneas de texto que indican las instrucciones que debe seguir el ordenador para ejecutar dicho programa. Es decir, en el código fuente de un programa está escrito por completo su funcionamiento. Así que tener acceso a él es la única forma de poder estudiarlo y modificarlo con garantías.
+
+Si hemos estado atentos a todo lo que hemos comentado, rápidamente nos daremos cuenta de que no hemos hecho ninguna referencia al precio de los programas. De hecho, debemos tener presente que aunque mucho software libre es gratuito, esto no tiene por qué ser necesariamente así. La libertad del software está relacionada con los permisos que su autor ofrece y no con su precio."^[https://osl.ull.es/que-es-el-software-libre/]
+
+Además, existen planteamientos éticos sobre la idoneidad de utilizar software libre en la universidad pública frente al SW comercial.
+
+Dentro de los lenguajes de programación orientados al análisis de datos destaca también el lenguaje Python. Existe un amplio debate acerca de cuál es el más adecuado para las distintas tareas que implican estos procesos. En términos generales R se  emplea más para el análisis estadístico ad hoc y en ámbitos académicos, mientras que Python se desenvuelve mejor dentro del desarrollo, de ello su integración en la empresa privada.
+
+Por último es importante resaltar el carácter polifacético que tiene R. Y es que este se encuentra a medio camino entre un lenguaje de programación y un entorno de comando para el análisis estadístico. Quizás esta flexibilidad sea uno de los aspectos más destacables ya que permite diferentes usos o formas de trabajar con R. Podemos optar por el análisis directo y secuencial en la línea de comandos o con apoyo de un presentando los resultados en látex  o automatizar y adaptar procesos mediante control de flujo, funciones y otros elementos más puros programación. 
+
+### Jornadas y comunidades
+
+Jornadas España:
+http://r-es.org/XjuR/
+
+Jornadas Usuarios R en Galicia:
+https://www.r-users.gal/
+
+Comunidad ROpenSpain:
+https://ropenspain.es/
+
+Comunidad de habla hispana:
+http://r-es.org/
+
+Diversidad de género en la comunidad R (listado de comunidades por países):
+
+https://rladies.org/ 
+
+Blog r-bloggers:
+
+https://www.r-bloggers.com/
+
+...
+
+## Instalación y configuración de R y R-Studio
+
+### Páginas de descarga:
+
+* https://www.r-project.org/
+* https://www.rstudio.com/
+
+La utilización del editor R-Studio presenta ventajas que no encontramos en R; por ejemplo comprobar que ningún paréntesis se queda sin cerrar, copiar y completar columnas, autocompletado, lista de variables, descripción del banco de datos, paquetes instalados, gráficos...
+
+
+### Alternativas en linea
+
+Si no queremos instalar R en nuestro ordenador o/y trabajamos en múltiples computadoras y necesitamos usar R tenemos las siguientes alternativas:
+
+- https://www.rstudio.com/products/cloud/ 
+
+En Rstudio cloud tras registrarnos la versión gratiutia nos deja 25h mensuales y
+
+- https://www.kaggle.com/
+
+
+## Consola, script y buenas prácticas
+
+A continuación se presentan algunas guías de estilo que pueden ser encontradas fácilmente en la red.
+
+* https://google.github.io/styleguide/Rguide.xml
+
+* http://adv-r.had.co.nz/Style.html
+
+Seguiremos unos principios básicos a la hora de escribir código:
+
+* Comenta tu código. Hoy sabes lo que hiciste, dentro de un mes no y desde luego tus colaboradores tampoco. 
+* Respeta los espacios. 
+* Tabulación por lo menos de 8 puntos.
+* No más de 80 caracteres por línea (respira).
+* No te vuelvas loco/a creando objetos. R es dinámico. 
+* Dales un nombre apropiado a tus objetos.
+* No compartas código con sentencias relativas a tu ordenador. 
+
+Mal:
+
+```{r, eval=FALSE}
+
+migraficademediacondionada=plot(sr~ind,type="n",xaxt="n",xlab="",ylab="",main="IC media");points(ICm[,1]~ind,pch=16);segments(ind,ICm[,2],ind,ICm[,3])
+```
+
+Mejor: 
+
+```{r eval=FALSE}
+# Intervalos para la media condicionada
+m.cond <- plot(sr ~ ind, type = "n", xaxt = "n", 
+               xlab = "", ylab = "", main = "IC media")
+#Puntos
+points(ICm[, 1] ~ ind, pch = 16)
+#Segmentos
+segments(ind, ICm[, 2], ind, ICm[, 3])
+```
+
+## Pedir ayuda e instalción de paquetes
+
+### Pedir ayuda
+En Internet:
+
+* Comunidad stackoverflow 
+  https://stackoverflow.com/
+  
+* Google 
+
+* Mailing List
+  https://www.r-project.org/mail.html
+
+En R:
+
+```{r Ayuda, eval=FALSE}
+help.search()
+help()
+?función
+help.start() #Ayuda en Htlm 
+```
+
+Encontrar librerías destacadas en CRAN:
+
+https://cran.r-project.org/web/views/
+
+Librerías Genomic-data:
+
+https://www.bioconductor.org/
+
+Cheatsheets:
+
+https://www.rstudio.com/resources/cheatsheets/
+
+### Bibliografía
+
+Monogan, J. E. (2015). Political analysis using R. Springer.
+
+Murrell, P. (2009). R Graphics. Wiley Interdisciplinary Reviews: Computational Statistics, 1(2), 216-220.
+
+Peng, R. (2012). Exploratory data analysis with R 
+
+Verzani, J. (2014). Using R for introductory statistics CRC Press.
+
+Williams, G. J. (2017). The Essentials of Data Science: Knowledge Discovery Using R Chapman and Hall/CRC.
+
+Wickham, H. (2016). ggplot2: elegant graphics for data analysis. Springer.
+
+Imai, K. (2017). Quantitative social science: An introduction. Princeton University Press.
+
+### Identificamos el entorno Rstudio
+
+Información de la sesión:
+
+```{r}
+sessionInfo()
+```
+
+
+### Instalación de paquetes
+
+La función básica que utilizamos para instalar paquetes en nuestro equipo es `install.packages("nombre_del_paquete")`. Otra manera es utilizar los menús desplegables de RStudio.
+
+```{r,eval = FALSE}
+install.packages("Nombre_del_paquete")
+```
+
+Una vez que instalamos un paquete no tendremos que volver a instalarlo. Lo que sí tenemos que hacer es cargarlo en cada sesión para poder utilizar sus funciones. Esto lo hacemos con `library("paquete")` que suele ponerse al inicio de nuestro script. 
+
+En la actualidad existen más de 15000 librerías en el repositorio CRAN.  
+
+## R una super calculadora
+
+**Operaciones aritméticas**
+
+Algunas de las siguientes funciones se pueden aplicar para números, vectores y matrices.
+
+```{r, eval=FALSE}
+x + y # suma 
+x - y   # resta 
+x * y   # producto 
+x / y   # cociente 
+x ^ y   # potencia
+x ** y  # potencia 
+x %% y  # x módulo  y
+x %/% y   # división entera (parte entera del cociente)
+```
+
+**Funciones numéricas**
+
+```{r eval=FALSE}
+abs(x)  # valor absoluto 
+sqrt(x) # raíz cuadrada 
+ceiling(x) # |x| entero mayor o igual a x más pequeño 
+floor(x) # |x| entero menor o igual a x más grande 
+trunc(x) #parte entera de x 
+sin(x) #seno 
+cos(x) #coseno 
+tan(x) #tangente 
+log(x) #logaritmo en base e 
+log(x, base=a) #logaritmo en base a 
+exp(x) #exponencial 
+factorial(x) #factorial 
+max(x,y) #máximo 
+min(x,y) #mínimo
+
+```
+
+**Constantes**
+
+* pi $\pi$ (3.141593...)
+
+* exp(1) $e$ (2.718282...)
+
+* library(constants) Podemos encontrar más constantes universales. 
+
+**Operadores lógicos**
+
+```{r eval=FALSE}
+x < y # menor que 
+x > y # mayor que 
+x <= y # menor o igual a 
+x >= y # mayor o igual a 
+x == y # igual a 
+x != y # distinto a
+x & y # y 
+x | y # o 
+!x # negación de x
+```
+
+**Pregunta if**
+
+La estructura general es:
+
+```{r eval=FALSE}
+
+if (condición) { expresión } 
+
+#Por ejemplo, 
+if (x >= 0) { cat("El valor de x es mayor o igual a cero.\n") }
+
+```
+
+**Pregunta if-else**
+
+La estructura general es:
+
+```{r eval=FALSE}
+
+if (condición) { 
+        expresión1 
+} else {
+        expresión2 
+} 
+#Por ejemplo, 
+if (x>=0) { 
+        cat("El valor de x es mayor o igual a cero.\n") 
+} else { 
+        cat("El valor de x es negativo.\n") 
+        }
+
+```
+
+**Ciclo for**
+
+***
+<font color = "green">*Existe una familia de funciones "apply" que funcionan como los 'for loops' cuando estos recorren una matriz de datos o listas (ver objetos más adelante). Resultan más comodas para realizar ciertas operaciones que los for loops y además forman parte del lenguaje "natural" de R.* 
+</font>
+
+***
+La estructura general es:
+
+```{r eval=FALSE}
+
+for (variable in secuencia) { expresión } 
+
+#Por ejemplo, 
+for (x in 1:3) { 
+        cat("x es", x, "\n") 
+        } 
+```
+
+**Ciclo while**
+
+La estructura general es:
+
+```{r eval=FALSE}
+
+while (condición) { expresión } 
+
+#Por ejemplo, 
+x <- 0 
+while (x<3) { 
+        cat("x es", x, "\n") 
+        x <- x+1 } 
+cat("x ya es", x, "\n") 
+```
+
+**Matrices**
+
+```{r eval=FALSE}
+matrix #Deﬁnición de matrices en R 
+t(A)   # Matriz traspuesta 
+A * B  # Multiplicación de matrices elemento a elemento 
+A %*% B # Producto matricial 
+A %o% B # Producto exterior 
+crossprod(A,B) #Producto A'B 
+crossprod(A)   #Producto A'A 
+diag(x)        #Si x es un vector, crea una matriz diagonal con los elementos de x en la diagonal 
+diag(A) # Si A es una matriz, devuelve la diagonal de A 
+diag(k) # Si k es un escalar, devuelve la matriz Identidad de dimensión k 
+solve(A, b) # Devuelve el vector x, solución de Ax = b
+solve(A)  # Inversa de la matriz A 
+y <- eigen(A) # Cálculo de autovalores y autovectores de A 
+y$val    # Autovalores de A 
+y$vec    # Autovectores de A 
+U <- chol(A) # Descomposición de Choleski de A. Devuelve una matriz triangular superior U tal que U'U = A
+cbind(A,B,...)  # Combina matrices o vectores horizontalmente 
+rbind(A,B,...)  # Combina matrices o vectores verticalmente 
+rowMeans(A) # Vector de medias por ﬁlas 
+rowSums(A) # Vector de suma de ﬁlas 
+colMeans(A) # Vector de medias por columnas 
+colSums(A) # Vector de suma de columnas 
+apply(A,1,fun) # Aplica la función fun a cada ﬁla de la matriz A 
+apply(A,2,fun) # Aplica la función fun a cada columna de la matriz A
+```
+
+
+## Datos bien estructurados
+
+Filosofía:
+
+https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html
+
+Existen muchas librerías que ayudan a estructurar correctamente los datos. Una de las mas utilizadas es el paquete `tydir` del universo `tidyverse` que combinada con el manejo de cadenas (strings) da buenos resultados. (ver Cheatsheet "String manipulation")
+
+## Tipos de objetos
+
+***
+**Case sensitivity**
+
+*R es "sensible" a las mayúsculas y minúsculas; `A` y `a` se refieren a diferentes objetos. Además si una sentencia está incompleta al final de una línea R pedirá mas información devolviendo el símbolo `+`.<font color="green"> Tip: Nombra a todos tus objetos en minúsculas y sin acentos.*</font>
+
+***
+
+La estructura fundamental del lenguaje R es el vector. 
+
+Entre los principales objetos y más comunes encontraremos:
+
+* Vector
+* Matriz 
+* Arrays (elementos del mismo tipo)
+* Factores
+* Caractér
+* Numericos (double)
+* Lógicos
+* Listas 
+* Data frame 
+* Funciones
+* ...
+
+¿Cómo sabemos de que clase es un objeto?
+
+```{r, eval=FALSE}
+class()
+```
+
+**Vector**
+
+Es la estructura básica de las variables. Los vectores (y otros objetos) se crean utilizando el operador de asignación `<-` o `=` que asigna la operación evaluada del lado derecho del operador al objeto del lado izquierdo.
+
+```{r}
+x <- c(5, 7, 9, 13, -4, 8) # Preferente 
+x = c(5, 7, 9, 13, -4, 8) # Equivalente
+x #llamar objeto
+```
+
+Tres funciones útiles son:
+
+* `exist()` Nos indica si un objeto existe en el espacio de trabajo.
+* `rm()` Elimina objetos del espacio de trabajo.
+* `ls()` Lista los objetos que existen en el entorno.
+
+De la misma manera podemos crear distintos objetos e incluso coercionar objetos de un tipo a otro.
+
+**Matriz**
+
+Las matrices almacenan valores en colecciones (arrays) bi-dimensionales que contienen elementos del mismo tipo, tal cual como una matriz en el contexto del álgebra lineal. Para crear una matriz tenemos que "pasar" un vector atómico (elementos del mismo tipo). Después le indicamos el número de filas y/o columnas con el argumento `nrow = un número` o `ncol = un número` respectivamente. 
+
+```{r}
+dado <- c(1:6)
+m <- matrix(dado, nrow = 2)
+m
+```
+
+Fijémonos en como posiciona los números por defecto. Si queremos que los indexe fila por fila, utilizamos el argumento lógico `byrow = TRUE`.
+
+```{r}
+m <- matrix(dado, nrow = 2, byrow = TRUE)
+m
+```
+
+**Arrays**
+
+Es como la matriz pero n-dimensional y menos versátil. Podemos usar un array para indexar valores en un cubo o hipercubo de 4,5, n-dimensiones. Para utilizarlo le pasamos un vector atómico como primer argumento y después las dimensiones con el argumento `dim`.
+
+```{r}
+coleccion <- array(c(11:14, 21:24, 31:34), dim = c(2,2,3))
+coleccion
+```
+
+**Factores**
+
+Se utilizan para almacenar valores categóricos, color de ojos, sexo, especie...
+Para crear un factor tenemos que pasar un vector atómico a la función `factor()`. De manera automática R añade niveles (un atributo. Ver atributos.) convirtiéndolos primero en enteros y asignando las etiquetas que corresponden a cada nivel (entero). 
+
+* `class()` Nos devuelve el tipo de objeto.
+* `attributes()` Nos devuelve los atributos del vector.
+
+```{r}
+animales <- factor(c("perro", "gato", "tortuga", "tortuga"))
+animales
+class(animales)
+attributes(animales)
+```
+
+Podemos ver como R sitúa exactamente los elementos con `unclass()`
+
+```{r}
+unclass(animales)
+```
+
+Es importante no confundir los factores con los caracteres. En general es mejor impedir que R convierta automáticamente las cadenas de caracteres en factores (que lo intentará cuando cargamos y creamos datos) a menos de que vayamos a trabajar con datos categóricos. 
+
+**Caracteres**
+
+Un vector tipo caracter está compuesto por cadenas de texto. Podemos crear un vector caracter con la función `character()` o bien añadiendo comillas.
+
+```{r}
+"hola"
+personas <- c("María", "Juan", "Adelaida", "Jorge")
+personas
+typeof(personas) #nos dice como se ha creado un objeto
+```
+
+A los elementos individuales de un vector caracter los llamamos *cadenas (strings)*. Nótese que un caracter puede ser más que letras. ¿Podrías determinar cuál de los siguientes elementos es un caracter y cuál es un número?
+
+```{r}
+1
+"1"
+"uno"
+```
+
+Un error muy típico es olvidar poner comillas a un caracter. Entonces R buscara un objeto en el entorno que probablemente no exista y nos devolverá un mensaje de error. 
+
+```{r}
+class(1)
+class("1")
+
+```
+
+Observemos una propiedad interesante de la función `character()` (numeric, logic...). Si vamos a la ayuda, observamos que admite el argumento `length` que por defecto es 0. 
+
+```{r}
+caja <- character(length = 5); caja 
+```
+
+Nos devuelve 5 espacios en blanco, o dicho de otra manera, un vector de longitud  6 vacío. Esta propiedad que puede parecer una bagatela ¿Para qué habríamos de querer un vector vacío?, pues nos será de mucha ayuda a la hora de crear *loops*/ciclos y trabajar de manera iterativa. 
+
+* `rep()` Replica los valores de $x$ $n$ veces. 
+
+```{r}
+caja <- rep("hola", 4)
+caja
+```
+
+Veámoslo ahora brevemente con el ciclo for (ver estructura ciclo for) y utilizando la función `numeric`.
+
+```{r}
+numeros <- c(1,3,7,4,10)
+numeros 
+caja2 <- numeric(length = length(numeros))
+caja2
+for (i in seq_along(numeros)) {
+        caja2[i] <- i + 0.1
+}
+caja2
+```
+
+Observa que R ordena los elementos de menor a mayor automáticamente. Por el momento no importa si no entiendes muy bien lo que ha pasado antes. Durante el curso iremos practicando estos conceptos que nos serán de mucha utilidad en el futuro. 
+
+**Numéricos**
+
+Es un vector de números. Positivos, negativos, con decimales o no. R guardará los números como `double` que es un término de computación referido a los bytes que utiliza el ordenador para computar. De cualquier manera, es mejor en nuestro caso pensar en ellos como simplemente números. 
+
+```{r}
+numeros <- c(1.3, 0.2, 4, 6, 0, -5); numeros
+typeof(numeros)
+class(numeros)
+```
+
+El objeto `numeros` ha sido creado como un `double`, sin embargo pertenece a la clase `numeric`. Números al fin y al cabo. 
+
+**Enteros**
+
+Poco utilizados fuera de las ciencias de la computación. Nosotros podemos crear vectores simplemente de la manera que vimos en el anterior punto. No obstante, nos quedamos con la forma de crear explícitamente enteros (por si nos los encontramos por algún lado) que es con la letra `L` mayúscula.
+
+* `()` Encerramos la sentencia entre paréntesis para llamar al objeto automáticamente. No hay que abusar de esto pues nos podríamos confundir en un mar de paréntesis.
+
+```{r}
+(enteros <- c(-1L, 3L, -50L))
+typeof(enteros)
+```
+
+**Lógicos**
+
+Los vectores lógicos indexan verdaderos y falsos `TRUE`, `FALSE` de la forma booleana. Los operadores lógicos son de mucha ayuda para hacer comparaciones (ver operadores lógicos) y construir índices para extraer elementos que cumplan ciertas condiciones lógicas. 
+
+```{r}
+10 < 10.00001
+```
+
+```{r}
+1 == c(1,1,0,4,0,3) #no confundir "=" con "=="
+```
+
+Cada vez que tecleamos `TRUE` o `FALSE` o `F` o `V` R considera este input como un lógico. Por este motivo intentaremos evitar nombrar a nuestros objetos con estas letras. 
+
+```{r}
+logico <- c(TRUE, FALSE, TRUE, F); logico
+```
+
+En la anterior línea de código hemos utilizado `;` para concatenar sentencias en la misma línea. 
+
+**Ordinales**
+
+Los ordinales son factores con un orden que dotanse a hallan categóricas, ampliamente empleados en las C.C.S.S.
+
+```{r}
+a <- factor(c("bueno","regular","malo"),ordered = T)
+a
+```
+
+Vemos como en la declaración de los niveles aparaece el orden de menor a mayor de los niveles
+
+
+**Listas**
+
+Puede considerarse una lista como un vector atómico dado que agrupa elementos en conjuntos unidimensionales. Sin embargo, las listas no agrupan valores individuales sino objetos (que evidentemente pueden ser de diferente tipo) e incluso otras listas. 
+
+```{r}
+milista <- list(c(animales, 1:3, m, "Perro", list(TRUE, FALSE)))
+milista
+```
+
+Como ya se puede apreciar, el contenido de una lista puede convertirse en una estructura complicada, pero al mismo tiempo flexible. Esta nos permite agrupar mucha información; básicamente podemos guardar ahí lo que queramos. 
+
+**Data frames**
+
+Un data.frame es la versión bidimensional de la matriz. Es la estructura más utilizada en la vida diaria para el análisis de datos. Podemos pensar en esta estructura como en las hojas de cálculo de Excel (aunque más útil) ya que se parece mucho en la forma en que están situados los datos. 
+Los data frames agrupan vectores **atómicos** en tablas bidimensionales, de tal manera que cada vector es una columna de la tabla. 
+
+* `head()` Vemos las 6 primeras filas por defecto.
+
+```{r}
+datos <- iris
+head(datos) # cabecera
+class(datos)
+```
+
+**Funciones**
+
+Las funciones también son un tipo de objeto.
+
+```{r}
+class(names)
+```
+
+Trabajan con un *input* y devuelven un *output*. No modifican el input.
+
+**Coerción**
+
+* matrix()  as.matrix()
+* array()  as.array()
+* factor()  as.factor()
+* data.frame()  as.data.frame()
+* list() as.list()
+* ...
+
+Supongamos que queremos convertir un vector tipo caracter en factores. Retomemos nuestro objeto `personas` creado previamente. 
+
+* `is.character()` test/ pregunta: ¿Es character? con respuesta lógica. 
+* `is.factor()`
+* ...
+
+```{r}
+is.character(personas)
+
+factor(personas)
+
+is.character(personas)
+```
+
+¿Porqué cuando preguntamos por sugunda vez si nuestro objeto `personas` es characater, nos sigue devolviendo la misma respuesta?
+
+Recordemos que una de las características de R es que es dinámico. Es decir, podemos ir probando sentencias, operaciones sin guardarlas necesariamente. De ésta manera no saturamos con objetos innecesarios nuestro espacio de trabajo y preservamos nuestra estabilidad mental. 
+
+* `levels()` Accedemos al atributo "niveles" de la variable. 
+
+```{r}
+pers.fact <- as.factor(personas)
+is.character(pers.fact)
+levels(pers.fact)
+```
+
+```{r}
+is.factor(pers.fact)
+```
+
+
+## Acceder a los elementos de un vector /  matriz / data.frame...
+
+
+### Vector
+
+La forma básica de seleccionar/extraer elementos dentro de un vector son los corchetes `[elemento]`. Existen tres maneras básicas:
+
+* Por posición
+* Por valor
+* Por nombre 
+
+**Posición**
+
+Retomemos el objeto `personas` que creamos antes y está compuesto por cuatro elementos. Para acceder a la posición 3 (al tercer elemento) hacemos lo siguiente:
+
+```{r}
+personas[3]
+```
+
+"Adelaida" es el elemento que ocupa la tercera posición de nuestro vector. Podemos acceder a todos menos a uno:
+
+```{r}
+personas[-3]
+```
+
+Vemos que R nos devuelve todos los elementos menos el tercero "Adelaida". 
+
+* Utilizamos el operador `:` para decir "desde `:` hasta"
+
+Ahora accedemos a los elementos que van desde el primero al tercero:
+
+```{r}
+personas[1:3]
+```
+
+Siguiendo la misma lógica podríamos negar esta secuencia pero ¡ojo!, no podemos hacer lo siguiente:
+
+```{r error=TRUE}
+personas[-1:3]
+```
+
+¿Podrías decir porqué? 
+
+La cuestión es que R interpreta que quieres acceder a los elementos que están en la posicisión desde -1 hasta la 3 ¿Cuál es la posición -1?. Pues bien, para negar esta secuencia utilizaremos los paréntesis `()`:
+
+```{r}
+personas[-(1:3)]
+```
+
+Que nos devuelve el cuarto elemento. Podemos "pasarle" a los corchetes otro vector que nos sirva de índice o incluso otras funciones.
+
+***
+<font color="green"> *Recuerda que los argumentos van separados por comas. Es común equivocarse al principio y no detectar dónde está el error.* 
+</font>
+
+***
+
+
+```{r}
+#Pasándole otro vector
+personas[c(1, 4)]
+```
+
+Que nos devuelve las posiciones 1 y 4. 
+
+* `grepl()` *Match* de argumentos utilizando patrones. (Ver Cheatsheet "String manipulation")
+
+Le pasamos una función de reconocimiento de patrones:
+
+```{r}
+personas[grepl(pattern = "María", x = personas)]
+```
+
+Que nos devuelve a el/los elementos que coinciden con el patrón "María".
+
+**Por valor**
+
+Retomamos el objeto `numeros` de longitud 6 que creamos antes . Utilizamos los operadores lógicos para acceder a los elementos. 
+
+```{r}
+numeros[numeros == 4] #No confundir "==" con "=". 
+```
+
+De la misma manera podemos utilizar cualquier otro tipo de operador lógico e incluso definir el índice fuera de la función. Retomamos nuestro objeto `m` que era una matriz 2 x 3.
+
+```{r}
+ii <- m > 4
+m[ii]
+```
+
+Hemos creado un índice al que hemos nombrado como `ii` que responde a una sentencia lógica. El mismo lo hemos pasado a los corchetes después del objeto (que es una matriz) para indicarle a R que estamos seleccionando/ extrayendo los elementos que cumplan con la condición lógica definida en `ii`. 
+
+* `%in%` Lo utilizamos "esto `en` este conjunto"
+
+Retomamos el objeto `personas`.
+
+```{r}
+ii <- c("Pedro", "Ramiro", "Adelaida")
+ii %in% personas
+```
+
+Observa que estamos haciendo una comprobación lógica por posición y R nos devuelve un lógico sobre cada elemento por el cual pregruntamos. 
+
+Ahora utilicemos esta idea para extraer elementos por valor.
+
+```{r}
+indice <- c(1,-5)
+indice %in% numeros
+```
+
+Como puedes observar con estos secillos ejemplos, las posibilidad y la flexibilidad para el manejo de grandes bases de datos es inmensa.
+
+**Por nombre**
+
+Le pasamos a los corchetes un nombre y, dado que un nombre es un caracter, recuerda ponerlo entre comillas.
+
+```{r error=TRUE}
+personas["Juan"]
+```
+
+¿Podrías decir porqué devuelve un error? 
+
+```{r}
+names(personas) <- c("María", "Juan", "Adelaida", "Jorge" )
+personas["Juan"]
+```
+
+### Matrices
+
+Hemos dicho anteriormente que una característica de un objeto tipo matriz es su bidimensionalidad y la restricción de contener elementos del mismo tipo. Fíjate en la lógica de extracción de elementos de un vector expuesta en los puntos anteriores. Utilizamos los corchetes `[]` y a ellos les "pasamos" una sentencia, índice, objeto... Le pasamos *una* por su unidimensionalidad. Ahora bien, dado que una matriz (y un data frame que veremos después) es bidimensional, a la hora de extraer / seleccionar elementos identificaremos dos posiciones dentro de los corchetes separadas por una coma. **La primera posición se refiere a las filas y la segunda a las columnas.** Veámoslo con un ejemplo y recuperemos nuestro objeto `m` definido anteriormente. 
+
+Supongamos que queremos extraer o referirnos a la primera fila:
+
+```{r}
+m[1,]
+```
+
+Observa que efectivamente R nos devuelve la primera fila de la matriz. Ahora extraigamos la segunda columna:
+
+```{r}
+m[,2]
+```
+
+Observa que la primera posición, que se refiere a las filas, la hemos dejado en blanco. Ahora extraigamos el elemento que se encuentra en la segunda fila y la tercera columna:
+
+```{r}
+m[2,3]
+```
+
+La misma lógica que seguimos para extraer elementos de un vector es valida para los objetos bidimensionales. 
+
+### Data frame
+
+* `$` Operador con el que extraemos variables de un data.frame
+
+El objeto tipo `data.frame` es uno de los más utilizados. Tanto es así, que incluso cuenta con un operador propio que nos permitirá seleccionar variables. Recuperamos nuestro objeto `datos`. 
+
+* `tail()` Nos devuelve las 6 últimas filas por defecto. 
+
+```{r}
+tail(datos$Sepal.Length, n = 4)
+```
+
+Observa la anterior sentencia. Hemos "aninado" operaciones de dentro hacía afuera. Primero seleccionamos la variable `Sepal.Length` y después a esa operación le hemos aplicado la función `tail()` pasándole a `tail()` el argumento `n = 4`, es decir, que nos devuelva las últimas cuatro filas del data frame `datos`. Podríamos seguir incluso anidando más sentencias:
+
+* `sd()` Nos da la cuasi-desviación típica. 
+
+```{r}
+sd(tail(datos$Sepal.Length, n = 4))
+```
+
+¿Podrías decir que hemos hecho en la anterior operación?
+
+Efectivamente. Hemos calculado la cuasi-desviación típica de los cuatro últimos valores de la variable `Sepal.Length` de nuestro data frame `datos`. 
+
+***
+<font color="green"> *Tip: Observa que cuando tecleas el perador `$` después de tu data frame en RStudio te aparece un menú desplegable con todas tus variables. Este autocompletado te ahorra mucho tiempo escribiendo e incluso a veces sirve de exploración rápida. Utilízalo.*
+</font>
+
+***
+
+De la misma manera que extraímos filas, columnas y valores concretos con los corchetes en las matrices, podemos utilizarlos en los dataframes. Supongamos que queremos extraer la cuarta fila del objeto `datos`:
+
+```{r}
+datos[4,]
+```
+
+O bien la séptima fila de la variable `Species`:
+
+```{r}
+datos[7,"Species"]
+```
+
+Además del valor "setosa", R nos devuelve los niveles del factor que hemos seleccionado. Supongamos que queremos hacer una comprobación lógica y nos preguntamos si el valor de la séptima fila de la variable `Species` es "versicolor".
+
+```{r}
+datos[7,"Species"] == "versicolor"
+```
+
+## Atributos
+
+Un atributo es información que podemos "pegar" a un vector atómico o a cualquier objeto. Éstos no afectan a los valores y tampoco los veremos cuando mandamos llamar a un objeto. Podemos pensar en ellos como en una especie de metadatos. Generalmente R ignorará esta información, sin embargo, muchas funciones bucean en los atributos para poder operar de manera conveniente. Si un objeto no tiene atributos veremos la salida `NULL`. 
+
+```{r}
+attributes(1)
+```
+
+Atributos comunes son:
+
+* `names()` Nombres.
+* `dim()`  Dimensión (útil para matrices y data.frames).
+
+Probemos con nuestro objeto `datos` creado anteriormente. 
+
+```{r}
+names(datos); dim(datos)
+```
+
+## Funciones propias
+
+<font color="green"> *Tip: Guarda tus funciones en scripts aparte, coméntalas correctamente y reutilízalas cuando las necesites cargándolas a la sesión con `load("mifuncion.R")`* 
+</font>
+
+La estructura general es:
+
+```{r eval=FALSE}
+
+mifuncion <- function(arumento1, argumento2, ...) {
+        expresiones
+        return(objeto)
+}
+```
+
+Es importante por motivos de estilo y para leer el código con mayor facilidad mantener esta estructura. Toda función en R cuenta con tres partes elementales:
+
+* Nombre de la función.
+* Cuerpo (el código entre corchetes).
+* Argumentos.
+
+Observemos que cada línea del código entre corchetes (el cuerpo) suele ser una sentencia u operación. Aunque R ignora los espacios, separarlo en líneas hace más fácil la lectura y R ejecuta la expresión entera entre corchetes. 
+
+**Cuerpo**
+
+Veamos un ejemplo. 
+
+* `sample()` Toma una muestra de n elementos de x con o sin remplazamiento. 
+
+```{r}
+#función anónima
+tirar.dado <- function() {
+        dado <- 1:6
+        dado.s <- sample(dado, 2)
+        sum(dado.s)
+} 
+```
+
+Vemos que nos devuelve como resultado la última operación del cuerpo de la función.
+Si mandamos llamar nuestra función sin los paréntesis nos devuelve el cuerpo de la función:
+
+```{r}
+tirar.dado
+body(tirar.dado) #equivalente
+```
+
+
+**Argumentos**
+
+***
+<font color="green">
+*Tip: Podemos consultar los argumentos de una función propia o de una librería con `?lafuncion()` No intentes aprenderte todos los argumentos de una función. *
+</font>
+
+***
+
+La anterior función es "anónima"; opera sin necesidad de pasarle ningún argumento. Lo interesante es que podemos pasarle cualquier vector, operación, objeto, ¡otra función!... a nuestra función y pedirle que opere con él. 
+
+* `length()` Nos devuelve la longitud del vector.
+* `sum()` Suma los elementos del vector numérico. 
+* `return()` Nos devuelve el valor de la expresión evaluada. 
+
+```{r error=TRUE}
+mimedia <- function(x) {
+        media <- sum(x) / length(x) 
+        return(media)
+}
+mimedia()
+```
+
+Nos devuelve un error porque la función `mimedia` necesita al objeto `x`, que no hemos definido, para realizar su función. Al objeto `x` podemos definirlo (i) dentro del cuerpo de la función, (ii) asignándole valores por defecto al argumento o, (iii) fuera de la función.
+
+*(i)*
+
+```{r}
+mimedia <- function(x) {
+        x <- 1:6
+        media <- sum(x) / length(x) 
+        return(media)
+}
+mimedia()
+```
+
+*(ii)*
+
+```{r}
+mimedia <- function(x = 1:6) {
+        media <- sum(x) / length(x) 
+        return(media)
+}
+mimedia()
+```
+
+*(iii)*
+
+```{r}
+a <- 1:6
+mimedia <- function(x) {
+        media <- sum(x) / length(x) 
+        return(media)
+}
+mimedia(x = a) 
+```
+
+***
+<font color="green"> Tip: Para el cuerpo de las funciones creadas por nosotros es mejor acceder a los elementos de la manera básica que con el universo `tidyverse` u otras librerías. </font>
+
+***
+
+## Lectura y escritura de datos
+
+**Directorio de trabajo**
+
+Cada vez que abrimos R la sesión se vincula a un directorio por defecto *(working directory)*. Es ahí donde R busca los datos cuando intentamos cargarlos y es ahí donde los guarda. Para saber que directorio se está utilizando:
+
+```{r}
+getwd()
+```
+
+Si queremos cambiarlo tendremos que especificar la ruta completa con la función `setwd()`. Ésta podemos copiarla y pegarla de las ventanas de navegación e, importante, tenemos que sustituir el *backslash* `\` por `/` y entrecomillar el texto. 
+
+```{r eval=FALSE}
+setwd("una_carpeta/miproyecto")
+```
+
+Lo más recomendable, a efectos de compartir código es abrir un nuevo "proyecto" en el entorno de RStudio. De esta manera no tendremos que cambiar en cada sesión nuestro directorio de trabajo y, sobre todo, no tendremos que enviar código basura a nuestros colaboradores. 
+
+**Textos planos**
+
+Es una de las maneras más comunes de almacenar datos (el .csv, .txt ... son textos planos) porque son muy simples y pueden ser leídos por muchos programas incluso por editores de texto básicos como un bloc de notas. Si te das cuenta, los datos públicos abiertos suelen venir en este formato. La función más común para leer texto plano es `read.table` que admite los siguientes argumentos entre otros (recuerda que puedes ver los argumentos que acepta cualquier función consultando la ayuda de r `?unafuncion()`):
+
+* sep
+* header
+* na.strings
+
+*Cargamos el archivo `calidadaire.txt` al entorno de trabajo*
+
+```{r, eval=FALSE}
+datos <- read.table("DATA/calidadaire.txt", header = T)
+```
+
+A su vez podemos guardar el objeto, supongamos que en formato .csv utilizando la función `write.csv`. Observa que es muy intuitivo y sigue la misma lógica para otras extensiones. 
+
+**Otros tipos de archivos**
+
+Si bien es lo más común trabajar con texto plano, hemos de saber que en R podemos leer prácticamente cualquier tipo de archivos, desde html's, acceder a API's, sql, mysql, wikipedia, .px, .tiff, .sav, .dbf, .xlxs ... 
+Aunque para ello tendremos que instalar paquetes desde el repositorio CRAN o desde cualquier otro. (Ver cargar paquetes)
+Una de las librerías más utilizadas (utilizamos indistintamente librerías y paquetes en este contexto) para cargar datos procedentes de SW específico es `foreign` que instalaremos en nuestro equipo y cargaremos como hemos aprendido antes. 
+
+```{r }
+library(foreign)
+```
+
+* `ls()` Nos devuelve los objetos de un entorno específico. 
+
+***
+<font color="green">
+*Tip: Con la siguiente sentencia podemos ver el listado de todas las funciones de una librería: ls("package:foreign")*
+</font>
+
+***
+
+```{r}
+ls("package:foreign")
+```
+
+Supongamos que queremos leer un archivo .sav
+
+```{r, eval=FALSE}
+datos <- read.spss("DATA/control.sav", to.data.frame = T) #es recomendable convertir los archivos .sav a objetos tipo data.frame utilizando el argumento to.data.frame = T
+```
+
+Para una consulta rápida podemos consultar la "chuleta" (*Cheatsheet*) "data_import".
+
+## Exploración inicial de un data.frame
+
+Una vez hemos abierto un proyecto nuevo o abierto uno ya existente, hemos cargado nuestros datos en la sesión y hemos llamado a nuestras librerías si es el caso, solemos realizar una serie de operaciones para darnos una idea de los datos con los que estamos trabajando. 
+
+Asignemos al objeto `datos` el data set `iris` 
+
+```{r}
+datos <- iris
+```
+
+
+* `View(datos)` Invocamos una hoja donde podemos explorar los datos. No es recomendable si tenemos una base muy pesada. 
+
+```{r eval=FALSE}
+View(datos)
+```
+
+Vemos los nombres de las variables:
+
+```{r}
+names(datos)
+```
+
+`names()` Nos devuelve un vector caracter con el atributo "nombre" de cada variable en `datos`.
+
+Vemos la cabecera y la cola de los datos:
+
+```{r}
+head(datos)
+tail(datos)
+```
+
+* `str()` Nos informa sobre la estructura interna de nuestro data frame. 
+
+```{r}
+str(datos)
+```
+
+Vemos que nos da la información del objeto `datos`. Nos dice que es un "data.frame" de dimensiones 150 x 5 (las dimension podemos obtenerla con `dim()`) y de cada variable nos indica que tipo de objeto es. Si nuestra variable es factor nos indica el número de niveles  y además nos muestra los primeros valores de cada variable. 
+
+* `missmap()` Vistazo gráfico de nuestros valores perdidos. Es necesario cargar la librería `library(Amelia)`. No recomendable para bases muy grandes. 
+
+```{r, message=FALSE, warning=FALSE}
+library(Amelia)
+missmap(datos)
+```
+
+* `summary()` Es una función genérica. Ver detalles con `?summary()`
+
+En nuestro ejemplo `summary()` nos devuelve los  estadísticos principales:
+
+```{r}
+summary(datos)
+```
+
+R nos devuelve de cada variable continua el mínimo, el máximo, el primer y tercer cuartil además de la media y la mediana. De la variable factor hace un conteo de las observaciones por nivel. En nuestro ejemplo no tenemos valores perdidos, si los hubiere, también vendrían especificados para cada variable. 
+
+* `var()` Nos da la cuasivarianza de un vector numérico. 
+
+La función `summary()` no nos da la cuasivarianza por defecto. Para calcularla utilizamos:
+
+```{r}
+var(datos$Sepal.Length)
+round(var(datos$Sepal.Length), 3)
+```
+
+Si queremos saber la cuasivarianza de todas las variables numéricas de nuestro data frame ¿Iremos calculando una por una? Lo mejor es pasarle un ciclo. Hemos especificado anteriormente el "ciclo for", sin embargo, hemos de saber que en R los *loops* "naturales" son los pertenecientes a la familia `apply` que iremos introduciendo durante el curso. 
+
+* `lapply(x = vector, función)` Aplica a cada elemento una función y nos devuelve un objeto tipo `list()`.
+
+A cada una de las variables numéricas les pasamos la función `var()`. Observa que no es necesario en este caso poner los paréntesis despues de `var`.
+
+```{r}
+lapply(datos[,1:4], var)
+
+```
+
+Si no nos gusta esta presentación podemos convertir la lista que nos ha devuelto R en un data.frame coercionando el objeto y además redondeando a 3 decimales. (Ver coercionar).
+
+```{r}
+round(as.data.frame(lapply(datos[,1:4], var)), 3)
+```
+
+## Operaciones con variables
+
+En este epígrafe veremos dos enfoques muy comunes en el tratamiento de datos en R. El primero es el enfoque `tidyverse` y el segundo con R base. Empezaremos mostrando el primero.
+
+Cargaremos la librería `dplyr`. 
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+```
+
+Podemos ver que el número de funciones que contiene esta librería es muy grande, y es que es una de las más utilizandas para el manejo de datos.l 
+
+```{r}
+length(ls("package:dplyr"))
+```
+
+Por el momento vamos a quedarnos con cinco funciones básicas que nos darán mucho juego en el manejo de datos diario: 
+
+* `select()` Selección de variables.
+* `filter()` Selecciona casos (filas) en las que se cumplen condiciones.
+* `mutate()` Crea nuevas variables. 
+* `group_by()` Agrupa valores.
+* `arrange()` Ordena valores.
+* `summarise()` Realiza resumenes. Trabaja con datos agrupados por `group_by()`.
+* `%>%` Pipe. Concatena sentencias.
+
+<font color="red"> *Desde la version de R 4.1 el operador pipe se encuentra disponible en base y no hace falta cargar maggrittr o tidyverse* </font>
+
+* `|>` Nuevo Pipe
+
+
+**select()**
+
+Retomemos nuestro objeto `datos` creado anteriormente. Vamos a utilizar `select()` para seleccionar (como su nombre indica) columnas. Observa que vamos a ir encadenando sentencias con el perador `%>%`, contrario a ir "anidando" ordenes como es en R base. 
+
+Supongamos que queremos seleccionar la variable "Sepal.Width" y ver sus primeras 6 filas:
+
+```{r}
+datos %>% select(Sepal.Width) %>% 
+        head()
+```
+
+Ahora seleccionamos todas menos "Sepal.Width" y vemos la cabecera:
+
+```{r}
+datos %>% select(-Sepal.Width) %>% 
+        head()
+```
+
+Observa de que a pesar de que estamos llamando a la variable por su nombre en la sintáxis de `dplyr()` no estamos obligados a ponerlo entre comillas. 
+
+<font color="green"> *Tip: Cuando encadenes sentencias con `%>%` reserva una línea para cada orden. De esta manera será fácil seguir tu razonamiento.* </font>
+
+De la misma manera que extraíamos / seleccionabamos en Rbas (por posición, valor y nombre) podemos hacerlo en `dplyr`. La cabecera de las tres primeras columnas y de la quinta:
+
+```{r}
+datos %>% select(c(1:3, 5)) %>% head()
+```
+
+
+**filter()**
+
+Utilizamos `filter()` para seleccionar casos. Vayamos concatenando sentencias. Supongamos que queremos extraer las observaciones de "Sepal.Width" pero sólo de aquellas flores que son "versicolor":
+
+```{r}
+datos %>% select(Sepal.Width, Species) %>% 
+        filter(Species == "versicolor") %>% head() #utilizamos head() al final por cuestiones de espacio en el documento. 
+```
+
+Dado que podemos seleccionar casos que cumplan con ciertos criterios, entonces también podemos utilizar operadores lógicos. De la operación anterior, además de seleccionar la especie "versicolor" queremos también la "setosa" y con una anchura de sépalo mayor que 3.7mm, entonces:
+
+```{r}
+datos %>% select(Sepal.Width, Species) %>% 
+        filter(Species == "versicolor" | Species == "setosa",
+               Sepal.Width > 3.7) 
+```
+
+**mutate()**
+
+Utilizamos mutate para crear nuevas variables que pueden ser el producto de una operación o simplemente cualquier valor.
+
+```{r}
+datos %>% select(Sepal.Width) %>% 
+        mutate(unos = 1) %>% 
+        head()
+```
+
+Simplemente hemos puesto un uno en cada fila y hemos nombrado a esa nueva variable como "uno". Pero podríamos realizar operaciones un poco más complejas. Supongamos que estamos interesador en crear una nueva variable que nos diga para cada observación de `Sepal.Width` si está por encima de su media o no. Pondremos un "TRUE" si lo está y un "FALSE" si no. ¿Cómo lo harías?
+
+Utilizaremos `ifelse()` (Ver estructura `ifelse`):
+
+```{r}
+sw <- datos$Sepal.Width
+datos %>% select(Sepal.Width) %>% 
+        mutate(mayor = ifelse(test = sw > mean(sw), 
+                              yes = TRUE, 
+                              no = FALSE)) %>%
+        head()
+```
+
+Comprueba que la media de `Sepal.Width` es 3.057333.
+
+**group_by()**
+
+* `summarise_all()` Aplica una función a todas las variables no agrupadas.
+
+```{r}
+datos %>% group_by(Species) %>% summarise_all(funs(mean))
+```
+
+**arrange()**
+
+**summarise()**
+
+#### Recodificación 
+
+Para recodificar valores necesitamos un vector lógico que determine los valores que vamos a recodificar según el criterio, que queramos; después simplemente asignamos el nuevo valor.
+
+```{r, eval=FALSE}
+
+datos$variable[vector.logico] <- nuevo.valor
+# ánalogos
+datos[ vector.logico,"variable"] <- nuevo.valor
+
+```
+
+
+Vamos a recodificar los valores superiores al percentil 75 de la variable longitud del Petalo de nuestro datos
+
+```{r}
+quantile(datos$Petal.Length)
+datos$Petal.Length[datos$Petal.Length > 5.10 ] <- 5.1
+
+```
+
+**Recodificar factores**
+
+Si queremos cambiar los niveles de un factor
+
+```{r}
+datos$Species <- factor(datos$Species,labels = c("se","ve","vi"))
+```
+
+Tmabién es común y útil coercionar a character con `as.character()` y luego recodificar.
+
+```{r, eval=FALSE}
+sp <- as.character(datos$Species)
+
+
+sp[sp == "setosa"] <- "se"
+sp[sp == "versicolor"] <- "ve"
+sp[sp == "virginica"] <- "vi"
+
+datos$Species <- factor(sp)
+```
+
+Dado un valor númerico podemos convertirlo en factor con la misma función empleando esta vez los dos argumentos levels y labels
+
+* **Función cut**:
+
+A veces es conveniente transformar una variable continua en una categórica o factor. Para ello empleamos la función `cut()`.
+Esta sirve para dividir en grupos en una variable continua. Existen dos formas de realizar esta operación, la primera es pasándole el número de cortes que queremos hacer. Esto dividirá el rango entre el número indicado.
+
+```{r}
+datos$cPet4 <- cut(datos$Petal.Length, breaks = 4)
+
+class(datos$cPet4)
+nlevels(datos$cPet4)
+
+head(datos[,c("Petal.Length","cPet4")]) 
+```
+
+Otra forma de hacerlo es determinar los cortes de forma manual con un vector para los cortes
+
+```{r}
+limites <- c(0,1.60,5.10,7)
+
+datos$cPet4 <- cut(datos$Petal.Length, breaks = limites)
+
+head(datos[3:6,c("Petal.Length","cPet4")]) 
+```
+
+Como indica el corchete el criterio de inclusión es por la izquierda. Podemos alterarlo con el argumento `right`, además podemos determinar las etiquetas con el argumento `label` por último podemos indicar si queremos que el resultado sea un factor o un factor ordenado.   
+
+```{r}
+datos$cPet4 <- cut(datos$Petal.Length, breaks = limites, right = F, labels = c("Uno","Dos","Tres"),ordered_result = T)
+levels(datos$cPet4)
+```
+
+
+
+#### Valores perdidos
+
+
+Los valores perdidos en R son representados en *R* con un `NA`
+
+```{r, echo=FALSE}
+datos.na <- iris
+set.seed(123)
+datos.na[sample(1:150,23),2] <- NA
+datos.na[sample(1:150,90),3] <- NA
+datos.na[30:40,5] <- NA
+datos.na[c(30,20,60,70,80),4] <- NA
+```
+
+
+```{r}
+x <- c(1,3,5,3,2,NA,13,13,4,2,1,NA)
+x
+```
+
+En este caso el vector es muy pequeño y podemos ver los valores perdidos pero en caso de no ser asi podemos ver cuales son estos con una rpegunta lógica:
+
+```{r}
+is.na(x)
+```
+
+Podemos sumar este vector para ver el numero de casos perdidos
+
+```{r}
+sum(is.na(x))
+```
+
+Ahora veamoslo en acción con nuestros datos, hemos añadido unos cuantos valores perdidos.
+
+```{r}
+sum(is.na(datos.na$Sepal.Width))
+
+```
+
+Vemos que hay 23 valores perdidos.
+
+Podemos usar la función de familias apply para ver cuantos hay en cada variable. En esta ocasión tenemos  
+
+```{r}
+sapply(datos.na, function(x) sum(is.na(x)))
+
+```
+Como vemos esta vez hemos llamado a function(x) antes , lo que hemos hecho es pasar una función anonima. Estas funciones son empleadas had hoc para tareas concretas. Básicamente son funciones definidas en la propia linea. La linea de código anterior sería equivalente a:  
+
+```{r}
+
+per <- function(x){
+  sum(is.na(x))
+}
+
+sapply(datos.na,per)
+```
+
+Las funciones anónimas son muy útiles en combinación con la `familia apply` ya que podemos emplearla también para añadir argumentos a la función aplicada como veremos más adelante.
+
+La función summary vista con anterioridad también proporciona el número de perdidos
+```{r}
+summary(datos.na)
+```
+
+Otra forma de `missmap()` Vistazo gráfico de nuestros valores perdidos. Es necesario cargar la librería `library(Amelia)`. No recomendable para bases muy grandes. 
+
+```{r, message=FALSE, warning=FALSE, fig.cap= "Mapa de perdidos"}
+library(Amelia)
+missmap(datos.na)
+```
+
+Ahora que tenemos identificados los valores perdidos podemos hacer algo al respecto. Imaginemos que queremos descartar Petal.Length ( la tercera columna, la función missmap los ordena de mayor número de perdidos a menor)
+
+```{r, eval=FALSE}
+
+datos.na <- datos.na[,-3]
+datos.na <- datos.na[,c(1:4)]
+datos.na <- datos.na[,c("Species","Petal.Width","Sepal.Length", "Sepal.Width")]
+# equivalentes
+```
+
+```{r, echo=FALSE}
+datos.na <- datos.na[,-3]
+```
+
+Otra forma de tratar con valores perdidos, es ignorar las observaciones que contengan alguno para ello podemos emplear `completecases`. Esta función devuelve un vector logico con las filas que contienen todos los casos.
+
+```{r}
+complete.cases(datos.na)
+
+# ahora se la pasamos a las filas
+
+datos.na2 <- datos.na[complete.cases(datos.na),]
+missmap(datos.na2)
+```
+
+Como vemos la matriz esta "limpia" lamentablemente en el proceso perdemos información. Otra forma de lidiar con los valores perdidos es ignorarlos.
+
+Imaginemos que queremos sacar la media de "Petal.Width"
+```{r}
+mean(datos.na$Petal.Length)
+```
+
+Al haber valores perdidos nos retorna `NA` pero saber la media de la variable deberiamos hacer lo siguiente.
+
+```{r}
+mean(datos.na$Petal.Length[!is.na(datos.na$Petal.Length)])
+```
+
+Afortunamende muchas funciónes incroporan un argumento para lidiar con los valores perdidos. En este caso el argumento `na.rm`(NA remove) nos permite omitir estos casos para el calculo 
+
+```{r}
+mean(datos.na$Petal.Length, na.rm = T)
+```
+
+## Frecuencias 
+
+
+Para obtener las frecuencias de una variable en R empleamos al función `table()`. Esta nos devuelve un vector de las frecuencias (con los nombres).
+
+```{r}
+table(datos$Species)
+
+```
+
+
+Podemos obtener una tabla de contingencia añadiendo el otro vector a la función.
+
+```{r}
+table(datos$Species,datos$cPet4)
+```
+
+El argumento useNA nos permite excluir los valores perdidos en caso de haberlos. 
+
+## Distribuciones
+
+Presentamos distribuciones notables desde el punto de vista del código para generarlas. Asumimos que los alumnos ya tienen alguna experiencia previa en probabilidad y estadística. 
+
+**Binomial**
+
+Sea $X \in B(n,p)$ una v.a. con función de probabilidad:
+$$P(X = x) = \binom{n}{x}p^xq^{n-x} \;\;\;\; \text{si}\;\;\;x=0,1,2,...,n$$ 
+Con,
+$$E(X) = np, \;\;\;\;\; Var(X) = npq$$
+
+En R tenemos cuatro sentencias:
+
+* `pbinom()` Probabilidad acumulada.
+* `dbinom()` Densidad. 
+* `qbinom()` Cuantil.
+* `rbinom()` Números pseudo-aleatorios que seguirán mi distribución.
+
+Esta misma lógica impera para las demás distribuciones notables. Por ejemplo, supongamos que $X \in B(10, 0.1)$ y que nos interesa $P(X=1)$ entonces,
+
+```{r}
+pbinom(1, 10, 0.1)
+```
+
+<font color="green"> *Los decimales en R se separan con puntos `.` no con comas `,`. Si estás acostumbrado a la notación española es común que puedas equivocarte. Tip: En vez de decir "cero coma uno" intenta decir "cero punto uno", de esta manera evitarás equivocarte cuando estés programando.* </font>
+
+De manera análoga podemos calcular la función de densidad. 
+
+Supongamo que nos interesa p en 1,2,3,4 y 5 y además queremos representarlos gráficamente para nuestra misma $X \in B(10,0.1)$. Entonces, 
+
+```{r}
+ex <- 0:5
+f <- dbinom(ex, 10, 0.1) #En vez de pasarle sólo un número al primer argumento, le pasamos una sentencia. 
+
+```
+
+Hasta aquí tenemos dos objetos: Uno que contiene una secuencia de enteros y otro con nuestra función de probabilidad. 
+
+* `cbind()` Toma vectores, matrices o data frames y los combina en columnas. 
+
+Vamos a hacer un data frame con los dos y lo representaremos. 
+
+```{r}
+df <- cbind(ex, f)
+df
+```
+
+* `plot()` Función genérica de graficado base. 
+
+```{r}
+plot(df, type = "h") # El argumento type = "h" nos da líneas verticales. 
+```
+
+Y como sé que la media de la media muestral es la media teórica,
+```{r}
+mean(dbinom(ex, 10, 0.1))
+```
+
+Con varianza npq,
+
+```{r}
+var(dbinom(ex, 10, 0.1))
+```
+
+Para las demás distribuciones el los cálculos siguen la misma lógica.
+
+**Normal**
+
+* `pnorm()` Probabilidad acumulada.
+* `dnorm()` Densidad. 
+* `qnorm()` Cuantil.
+* `rnorm()` Números pseudo-aleatorios que seguirán mi distribución.
+
+**Poisson**
+
+* `ppois()` Probabilidad acumulada.
+* `dpois()` Densidad. 
+* `qpois()` Cuantil.
+* `rpois()` Números pseudo-aleatorios que seguirán mi distribución.
+
+**...**
+
+## RMarkdown
+
+Los ejercicios prácticos se presentarán en distintos formatos utilizando RMarkdown.
+Probablemente una de los mejores manuales por el momento es el de Yihui Xie, J. J. Allaire y Garrett Grolemund que puede consultarse en:
+
+https://bookdown.org/yihui/rmarkdown/
+
+También existe otro manual realizado por los profesores Fernández-Casal, R. y Cotos-Yáñez, T.R. de la Universidade da Coruña. Puede consultarse en:
+
+https://rubenfcasal.github.io/bookdown_intro/

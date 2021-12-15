@@ -1,0 +1,344 @@
+---
+title: "Regresión lineal 1"
+author:
+- Javier Kniffki
+- javierkniffki@gmail.com
+date: "`r Sys.Date()`"
+subtitle: "Introducción a R. Ciencias Políticas"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+---
+
+<script>
+function myFunction() {
+    var x = document.getElementById("myDIV");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+ 
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE,message = FALSE)
+
+```
+
+# Lectura de los datos
+
+En esta ocasión vamos a leer los datos depositados en el repositorio de github para agilizar el proceso. Pero muchas veces trabajaremos con datos a nivel local para leer estos conviene recordar unas cuantas funciones y algunas nociones para trabjar con archivos en R
+
+## Repaso gestión de archivos en R
+
+Para verificar el entorno de trabajo es decir la carpeta donde R esta ahora mismo empleamos ```getwd()``` para cambiar dicho entorno podemos emplear la función ```setwd()```. 
+
+```{r, eval=FALSE}
+# Cambiando el directorio de trabajo a Rproject la carpeta de data
+setwd("C:/Users/UserName/Documents/Rproject/data")
+```
+
+
+Recuerda que en R **"\\"** es un scape character que sirve para identificar otras cadenas de texto asi que es necesario poner **"\\\\"** en la especificación de la dirección o emplear directamente **"/"**. 
+
+<div class = "alert alert-success">
+Correcto: <br>
+"C:/Users/UserName/Documents/Rproject/data" <br>
+"C:\\\\Users\\\\UserName\\\\Documents\\\\Rproject\\\\data"
+</div>
+
+
+<div class = "alert alert-danger">
+Incorrecto:<br>
+"C:\\Users\\UserName\\Documents\\Rproject\\data"
+</div>
+
+Para listar los archivos de una carpeta empleamos la función ```ls("directorio/donde/listar/archivos")``` el resultado lo podemos guardad en un vector y acceder a el de la forma habitual. Otra función interesante es ```file.choose()``` la cual abrira un navegador de archivos y nos permitira seleccionar un archivo o carpeta concreta de forma manual imprimiendo su path en la consola. Recuerda que tambien podemos guardar este valor en un objeto ```archivo <- file.choose()```
+
+<div class = "alert alert-warning"> 
+Si estamos trabajando en un proyecto el working directory sera el del proyecto.
+</div>
+
+```{r}
+
+```
+
+## Lectura
+
+A continuación pasamos a leer los datos. En este caso se trata de un ```.csv``` **Comma separeted values** 
+
+```{r}
+
+# para leer en local
+file.exists("./datos/CD_hdi_corr_sc.csv")
+
+# función de R base
+datos <- read.csv("./datos/CD_hdi_corr_sc.csv")
+
+```
+
+# Exploración inical 
+
+Exploramos de forma habitual
+
+```{r}
+str(datos)
+summary(datos)
+```
+
+
+```{r}
+hist(datos$avg_years_school)
+hist(datos$Corruption_perception_index)
+
+mean(datos$Corruption_perception_index)
+mean(datos$Corruption_perception_index, na.rm = T)
+```
+
+# Transformaciones
+
+Normalmente aprobecaharíamos los datos de panel para el ajuste de modelos más fidedignos aqui vamos a sacar una media del rango temporal disponible y revertir el índice de corrupción para hacerlo más sencillo a la hora de interpretar.
+
+```{r, warning=FALSE}
+library(dplyr)
+
+# función propia que no tiene en cuenta los NA
+mimedia <- function(x) { mean(x, na.rm = T)}
+
+# Seleción de variables, agrupación y calculo 
+ datos_mod <- datos |> select(Entity,avg_years_school,Corruption_perception_index,PopEstimate) |> group_by(Entity) |> summarise_all(mimedia)
+ 
+# quitamos casos que no esten completos
+datos_mod <- datos_mod[complete.cases(datos_mod),] 
+ 
+ 
+ # recuperamos los continentes
+ datos_mod2 <- datos_mod |> left_join(unique(datos[,c("Entity","Continent")]))  
+ 
+ 
+ # cambiar la variable corruption index 
+ datos_mod2 <- datos_mod2 |> mutate(Corruption_perception_index = 100 - Corruption_perception_index)
+
+ 
+ head(datos_mod2)
+```
+
+# Modelos
+
+El modelo lineal básico .. 
+
+$$ Y_{i}=\beta _{0}+\beta _{1}X_{i1}+\beta _{2}X_{i2}+\ldots +\beta _{p}X_{ip}+\epsilon_{i}$$
+
+```{r}
+mod1 <- lm(formula = Corruption_perception_index ~ avg_years_school ,data = datos_mod2)
+
+summary(mod1)
+
+confint(mod1)
+```
+Nuestro modelo entonces sería:
+
+$$Corruption\_perception \ =\ 86.0829 + -4.0586*avg\_years\_shcool+\epsilon $$
+
+```{r}
+library(ggplot2)
+
+ggplot(data = datos_mod2,aes(x = avg_years_school, y = Corruption_perception_index)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+
+mod2 <- lm(formula = Corruption_perception_index ~ poly(avg_years_school,2) ,data = datos_mod2)
+
+summary(mod2)
+
+confint(mod2)
+
+```
+```{r}
+ggplot(data = datos_mod2,aes(x = avg_years_school, y = Corruption_perception_index)) +
+  geom_point() +
+  geom_smooth(method = "lm",formula = y ~ poly(x,2))
+```
+
+El segundo modelo quedaría asi:
+
+$$Corruption\_perception \ =\ 56.79  -165.65*avg\_years\_shcool  -47.57 * avg\_years\_school^2+ \epsilon $$
+
+# Diagnóstico
+
+Para evaluar un modelo lineal es importantante tener en cuenta estas 4 condiciones:
+
+- Linealidad 
+- Homocedasticidad ( $Var(e_i) = \sigma^2$ con $\sigma^2$ constante )
+- Normalidad: ( $\epsilon_i \sim N(0,\sigma^2)$ )
+- Independencia de los errores
+
+
+```{r}
+plot(mod1, col = "blue")
+plot(mod2, col = "green")
+```
+
+
+# Comunicando Resultados
+
+## Tablas comparativas
+
+```{r, eval=FALSE}
+library(report)
+library(stargazer)
+
+# hacemos otro modelo para incluirlo en la tabla
+
+mod3 <- lm(formula = Corruption_perception_index ~ avg_years_school + log(PopEstimate) ,data = datos_mod2)
+
+stargazer(mod1,mod2,mod3,type = "text")
+```
+
+```{r, echo=FALSE,results='asis'}
+library(stargazer)
+
+# hacemos otro modelo para incluirlo en la tabla
+
+mod3 <- lm(formula = Corruption_perception_index ~ avg_years_school + PopEstimate ,data = datos_mod2)
+
+stargazer(mod1,mod2,mod3,type = "html")
+
+```
+
+## Texto
+
+```{r}
+library(report)
+report(mod2)
+```
+## Gráfico
+
+
+```{r}
+p1 <- ggplot(data = datos_mod2,aes(x = avg_years_school, y = Corruption_perception_index)) +
+  geom_smooth(method = "lm",formula = y ~ poly(x,2)) 
+
+p1  
+```
+```{r}
+p1 + geom_point(color = "blue")
+```
+
+```{r}
+p1 + geom_point(aes(color = Continent))
+```
+```{r}
+p1 + geom_point(aes(color = Continent,size = PopEstimate),alpha = 0.8)
+```
+```{r}
+p2 <- ggplot(data = datos_mod2,aes(x = avg_years_school, y = Corruption_perception_index)) +
+  geom_point(aes(color = Continent,size = PopEstimate),alpha = 0.8) +
+  geom_smooth(method = "lm",formula = y ~ poly(x,2),color = "#7FFFD4") 
+
+p2  
+```
+```{r}
+p2 <- p2 + theme_minimal()
+p2
+```
+```{r}
+p2 <- p2 + guides(size = "none") + theme(legend.position = "bottom")
+p2
+```
+
+```{r}
+p2 <- p2 + scale_size(range = c(2,10)) 
+p2
+```
+```{r}
+p2 <- p2 + scale_color_manual(values = c("#b22222","forestgreen","dodgerblue3","gold","purple","orange3"))
+p2
+```
+```{r}
+p2 <- p2 + labs(title = "Corruption and Education",
+           subtitle = "Evidence from longitudinal data of 178 countries",
+           caption = "data source: Our Worl in data, average from 1990-2021",
+           x = "Average years of schooling in current adults",y = "Corruption perception index")
+p2
+```
+
+#
+
+
+
+# Ejercicios {.tabset .tabset-fade}
+
+
+1. Empleando el objeto **datos** extrae los valores de Francia ¿cuantos valores perdidos hay en la variable referida a la percepción de la corrupción?
+
+<details>
+  <summary class = "btn btn-primary"> Ver la respuesta</summary>
+
+
+```{r}
+fr <- datos[datos$Code == "FRA",]
+head(fr)
+
+sum(is.na(fr$Corruption_perception_index))
+```
+
+
+</details> 
+<br>
+
+2. Construye un modelo con la variable **Human_Dev_index** como variable independiente y **Corruption_perception_index** como dependiente. Emplea la media para cada pais en el rango de años de los datos iniciales ¿Su ajuste ($R^2$) es mejor que el del objeto mod1 ?
+
+<details>
+  <summary class = "btn btn-primary"> Ver la respuesta</summary>
+
+
+```{r}
+
+# función propia que no tiene en cuenta los NA
+mimedia <- function(x) { mean(x, na.rm = T)}
+
+# Seleción de variables, agrupación y calculo 
+ datos_ej2 <- datos |> select(Entity,Human_Dev_index,Corruption_perception_index) |> group_by(Entity) |> summarise_all(mimedia)
+ 
+# quitamos casos que no esten completos
+datos_ej2 <- datos_ej2[complete.cases(datos_ej2),] 
+
+# cambiar la variable corruption index 
+datos_ej2 <- datos_ej2 |> mutate(Corruption_perception_index = 100 - Corruption_perception_index)
+
+# ajustamos el modelo
+mod_ej2 <- lm(data = datos_ej2,Corruption_perception_index~Human_Dev_index)
+
+
+# R cuadrado
+summary(mod_ej2)$r.squared 
+summary(mod_ej2)$r.squared > summary(mod1)$r.squared
+
+```
+
+</details>
+
+<br>
+
+3. Obten el gráfico de dispersión con la recta de la regresión para el modelo del ejercicio 2
+
+<details>
+  <summary class = "btn btn-primary"> Ver la respuesta</summary>
+  
+```{r}
+ggplot(data = datos_ej2,aes(x = Human_Dev_index, y = Corruption_perception_index)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+  
+ </details>
+<br>

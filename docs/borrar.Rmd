@@ -1,0 +1,68 @@
+---
+title: "probando_botones"
+author: "sdsds"
+date: "13/12/2021"
+output: html_document
+---
+
+<script>
+function myFunction() {
+    var x = document.getElementById("myDIV");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## R Markdown
+
+<button onclick="myFunction()">Show/ hide</button>
+ 
+<div id="myDIV">
+ 
+Some comments here.
+ 
+There are lots so it's nice.
+ 
+To be able to hide them.
+
+
+```{r}
+plot(mtcars$cyl)
+```
+
+
+<details>
+  <summary class = "btn btn-primary"> Ver la respuesta</summary>
+  
+  holas que tal dskkds
+  
+  
+```{r}
+hist(1:10)
+```
+
+</details> 
+
+
+
+## R Markdown 2
+
+<button onclick="myFunction()">Show/ hide</button>
+ 
+<div id="myDIV">
+ 
+Some comments here.
+ 
+There are lots so it's nice.
+ 
+To be able to hide them.

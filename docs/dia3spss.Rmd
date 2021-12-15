@@ -1,0 +1,196 @@
+---
+title: "Datos no vacunados"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning = FALSE,message = FALSE)
+```
+
+## Lectura de los datos
+
+```{r}
+library(foreign)
+
+datos <- read.spss("./datos/3340.sav",use.value.labels = T,to.data.frame = T)
+```
+## Selección variables y transformaciones
+
+
+- P5:¿Se ha vacunado Ud. del COVID-19?
+
+- P5B:¿Cuál es la razón principal por la que no se vacunaría
+cuando llegase su turno?
+
+- P7: ¿Ante los riesgos de contagio de coronavirus, ¿cree Ud.
+que habría que obligar a todas las personas a
+vacunarse aunque no quisieran hacerlo?
+
+- P.22 Suponiendo que mañana se celebrasen nuevamente
+elecciones generales, es decir, al Parlamento español,
+¿a qué partido votaría Ud.? (RESPUESTA
+ESPONTÁNEA, ¡¡NO LEER LAS OPCIONES DE
+RESPUESTA!!).(**INTENCIONGR**)
+
+
+```{r}
+
+estas <- c("SEXO","EDAD","P5","P5B","P7","INTENCIONGR")
+
+main6 <- c("PP","PSOE","Unidas Podemos","VOX","Ciudadanos")
+
+
+datos <- datos[,estas]
+
+# convertir a numerico
+datos$EDAD <- as.numeric(as.character(datos$EDAD))
+
+# categorica ordinal con 
+datos$EDAD2 <- cut(datos$EDAD,breaks = 6,ordered_result = T)
+
+# Voto
+datos$INTENCIONGR <- as.character(datos$INTENCIONGR)
+
+datos$INTENCIONGR[!datos$INTENCIONGR %in% main6 ] <- NA
+
+datos$INTENCIONGR <- factor(datos$INTENCIONGR)
+
+# Variable dummy 
+datos$oblig <- 0
+datos$oblig[datos$P7 == levels(datos$P7)[1]] <- 1
+
+```
+
+## Proporción de personas mayores de 18 años que dicen estar vacunadas
+
+```{r}
+table(datos$P5)[1:2]
+
+# IC de wilson
+prop.test(3590,nrow(datos))
+```
+
+## Cuales son los motivos para no vacunarse
+
+```{r}
+t1 <- table(datos$P5B)
+
+t1 <- rev(sort(t1))
+
+t2 <- prop.table(t1)
+
+t3 <- cbind(t1,round(t2,3)*100)
+
+t3 <- as.data.frame(t3)
+
+t3
+```
+
+
+# Test de indpendencia
+
+```{r}
+chisq.test(datos$SEXO,datos$INTENCIONGR)
+```
+
+
+```{r}
+chisq.test(chisq.test(datos$SEXO,datos$INTENCIONGR))
+```
+
+
+
+
+## Función propia Chisq.test
+
+```{r}
+
+mychisq <- function(x,y){
+
+
+t1 <- table(x,y)
+ht <- chisq.test(x,y)
+# chi & table into data.frame
+df1 <- as.data.frame(t1)
+names(df1)[1:2] <- c("Var1","Var2")
+df1$res <- as.vector(round(ht$stdres,2))
+df1$exp <- as.vector(round(ht$expected,0))
+df1$obv <- as.vector(ht$observed)
+
+plt <- ggplot(df1,aes(Var1,Var2,fill = res, label = paste(df1$obv," / ",df1$exp,"\n",df1$res,sep = ""))) +
+  geom_raster() +
+  scale_fill_gradient2(low = "blue", mid = "white",high = "red") +
+  geom_text() +
+  guides( fill = guide_colorbar(title.position = "top")) +
+  scale_x_discrete(position = "top") +
+  theme_minimal()
+
+return(plt)
+  
+}
+p1 <- mychisq(datos$SEXO,datos$INTENCIONGR)
+
+p1 + theme(axis.text.y  = element_text(angle = 90, size = 14, hjust = 0.5),
+        axis.text.x = element_text(size = 12),
+        plot.caption = element_text(face = "italic"),
+        legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.key.height = unit(1,"mm"),
+        legend.key.width = unit(14,"mm"),
+        legend.title = element_text(size = 10),
+        legend.title.align = 0.5,
+        plot.title = element_text(hjust = 0.5,face = "bold.italic", size = 20 )) +
+  labs(title = "titulo",
+       y = "y",
+       x = "x",
+       fill = "Standarized residuals",
+       caption  = "data:",
+       subtitle = "Observer / expected")
+```
+
+
+
+
+
+
+```{r}
+glm(data = datos, formula = oblig~EDAD)-> mod1
+
+library(ggplot2)
+ggplot(data = datos,aes(EDAD,oblig)) +
+  geom_jitter(width = 0.02,height = 0.02,alpha=0.2) +
+  geom_smooth(color = "red",se = F) +
+  geom_smooth(method="glm", se = FALSE, method.args = list(family="binomial"))+
+  geom_smooth(method = "lm" ,se = F,color = "green")
+```
+
+```{r}
+ggplot(data = datos,aes(EDAD,oblig)) +
+  geom_jitter(width = 0.02,height = 0.02,alpha=0.2) +
+  geom_smooth(method = "gam") + facet_wrap(~INTENCIONGR) + ylab("Habría que obligar a todas las personas a
+vacunarse aunque no quisieran hacerlo") + labs
+
+
+mod <- glm(oblig~EDAD+INTENCIONGR,datos, family = binomial)
+
+summary(mod)
+
+a<-broom::tidy(mod,exponentiate = T)
+
+a$p.value <- round(a$p.value,4)
+```
+
+
+
+```{r}
+ggplot(data = datos,aes(EDAD,oblig,color = SEXO)) +
+  geom_jitter(width = 0.02,height = 0.02,alpha=0.2) +
+  geom_smooth(method = "gam") + facet_wrap(~INTENCIONGR) + ylab("Habría que obligar a todas las personas a
+vacunarse aunque no quisieran hacerlo") 
+
+
+mod <- glm(oblig~EDAD+SEXO,datos, family = binomial)
+summary(mod)
+```
+
+
