@@ -1,0 +1,12 @@
+name: "miweb"
+navbar:
+  title: "Curso R CCPP 2021"
+  left:
+  - text: "Primera sesión"
+    href: "intro_basica.html"
+  - text: "Segunda sesion"
+    menu: 
+      - text: "Segunda sesión"
+        href: "borrar.html"
+      - text: "Ejercicios segunda sesión"
+        href: "regresion_1.html"
